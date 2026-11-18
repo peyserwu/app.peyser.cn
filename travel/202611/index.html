@@ -19,22 +19,13 @@
     }
 
     body {
-margin: 0;
+      margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "PingFang SC", "Hiragino Sans GB", sans-serif;
       background-color: #000000;
       color: #f5f5f7;
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      font-size: 15px;
-    }
-
-#cityTabs {
-      touch-action: pan-x;
-      overflow-y: hidden;
-    }
-    .swipe-track {
-      touch-action: pan-x;
     }
 
     .mono {
@@ -50,6 +41,7 @@ margin: 0;
       -webkit-text-fill-color: transparent;
     }
 
+    /* 苹果高级毛玻璃面板 */
     .apple-surface {
       background: rgba(28, 28, 30, 0.65);
       backdrop-filter: blur(28px) saturate(160%);
@@ -79,7 +71,7 @@ margin: 0;
       right: 0;
       bottom: 0;
       width: 28px;
-      background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.92));
+      background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(28, 28, 30, 0.92));
       pointer-events: none;
       transition: opacity 0.25s ease;
     }
@@ -167,7 +159,7 @@ margin: 0;
 </head>
 <body class="selection:bg-white/20">
 
-  <!-- 门禁 / 解锁屏：Logo在左上角，返回在logo下面，中间主题比较大 -->
+  <!-- 门禁 / 解锁屏 -->
   <div id="lockScreen" class="fixed inset-0 z-50 flex flex-col justify-between p-6 sm:p-10 bg-black transition-opacity duration-500">
     <div class="flex flex-col items-start gap-2 pt-2">
       <div class="text-xl sm:text-2xl font-bold tracking-tight text-white">Peyser's Studio</div>
@@ -177,10 +169,10 @@ margin: 0;
     </div>
 
     <div class="w-full max-w-sm mx-auto text-center animate-in my-auto">
-<h1 class="hero-title text-5xl sm:text-7xl mb-4 tracking-tight flex items-center justify-center gap-3">
-  <span>比利时</span>
-  <img src="https://flagcdn.com/w80/be.png" alt="比利时国旗" class="inline-block w-12 sm:w-16 h-auto rounded shadow-sm align-middle" />
-</h1>
+      <h1 class="hero-title text-5xl sm:text-7xl mb-4 tracking-tight flex items-center justify-center gap-3">
+        <span>比利时</span>
+        <img src="https://flagcdn.com/w80/be.png" alt="比利时国旗" class="inline-block w-12 sm:w-16 h-auto rounded shadow-sm align-middle" />
+      </h1>
       <p class="text-base sm:text-lg text-zinc-400 tracking-wide mb-10">2026年11月 · 步行漫游系统</p>
 
       <form id="unlockForm" class="space-y-4">
@@ -202,45 +194,48 @@ margin: 0;
     </div>
 
     <div class="text-center pb-2">
-      <p class="text-[11px] text-zinc-600 font-mono">Copyright © 2026 Peyser's Studio. All Rights Reserved.</p>
+      <p class="text-[11px] text-zinc-600 font-mono">Copyright © 2026 Peyser Wu. All Rights Reserved.</p>
     </div>
   </div>
 
   <!-- 主界面 -->
   <div id="appContent" class="hidden max-w-5xl mx-auto px-5 sm:px-8 pt-4 sm:pt-6 pb-24">
 
-    <!-- 顶部常驻导航栏（带上滑缩小动画） -->
-    <header id="stickyHeader" class="sticky top-0 z-40 -mx-5 sm:-mx-8 px-5 sm:px-8 py-3 mb-5 apple-surface hairline-b flex items-center justify-between transition-all">
-      <div class="flex items-center gap-3">
-        <a href="https://app.peyser.cn/travel" class="p-1.5 -ml-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs transition" title="返回上级">
-          ←
-        </a>
-        <div>
-          <h1 id="brandTitle" class="hero-title text-xl sm:text-2xl font-bold transition-all">Peyser's Studio</h1>
-          <p id="brandSub" class="text-[11px] text-zinc-400 hidden sm:block">2026年11月 · 比利时</p>
+    <!-- 顶部连体吸顶毛玻璃面板：Logo栏与城市选项合并在同一块毛玻璃中 -->
+    <div id="stickyHeader" class="sticky top-0 z-40 -mx-5 sm:-mx-8 px-5 sm:px-8 pt-3 pb-2.5 mb-6 apple-surface hairline-b shadow-xl transition-all">
+      <!-- 第一行：Logo与时钟 -->
+      <div class="flex items-center justify-between pb-2.5 hairline-b">
+        <div class="flex items-center gap-3">
+          <a href="https://app.peyser.cn/travel" class="p-1.5 -ml-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs transition" title="返回上级">
+            ←
+          </a>
+          <div>
+            <h1 id="brandTitle" class="hero-title text-xl sm:text-2xl font-bold transition-all">Peyser's Studio</h1>
+            <p id="brandSub" class="text-[11px] text-zinc-400 hidden sm:block">2026年11月 · 比利时</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="mono text-xs text-zinc-400 bg-white/5 px-2.5 py-1 rounded-full" id="euClock">--:-- CET</span>
+          <button id="lockNowBtn" class="text-xs text-zinc-400 hover:text-white transition px-2 py-1">锁定</button>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="mono text-xs text-zinc-400 bg-white/5 px-2.5 py-1 rounded-full" id="euClock">--:-- CET</span>
-        <button id="lockNowBtn" class="text-xs text-zinc-400 hover:text-white transition px-2 py-1">锁定</button>
-      </div>
-    </header>
 
-    <!-- 城市/信息 导航栏：信息排在最前面 -->
-    <div id="cityScrollWrap" class="city-scroll-mask mb-6 sticky top-[61px] z-30 py-2 -mx-5 px-5 bg-black/80 backdrop-blur-xl animate-in" style="animation-delay: 60ms;">
-      <nav id="cityTabs" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pr-6 scroll-smooth"></nav>
+      <!-- 第二行：城市与信息选项卡 -->
+      <div id="cityScrollWrap" class="city-scroll-mask pt-2.5">
+        <nav id="cityTabs" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pr-6 scroll-smooth"></nav>
+      </div>
     </div>
 
     <!-- 双栏主体 -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start animate-in" style="animation-delay: 120ms;">
 
-      <!-- 左侧内容区：动态切换 “信息页” 或 “城市打卡/美食页” -->
+      <!-- 左侧内容区 -->
       <div class="lg:col-span-7 space-y-6" id="leftColumnArea">
         <!-- 动态渲染内容 -->
       </div>
 
-      <!-- 右侧：地图定位紧跟在左侧选项下方 -->
-      <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-6">
+      <!-- 右侧：地图定位 -->
+      <div class="lg:col-span-5 lg:sticky lg:top-36 space-y-6">
         <div class="apple-surface rounded-3xl p-4 sm:p-5">
           <div class="flex items-center justify-between gap-3 mb-3.5">
             <div class="min-w-0">
@@ -282,8 +277,8 @@ margin: 0;
 
     <!-- 底部版权信息 -->
     <footer class="mt-20 pt-6 hairline-b text-center text-xs text-zinc-500">
-      <p>Peyser's Studio · Peyser's Travel System (BETA 1.0)</p>
-      <p class="mono mt-1 text-[11px] text-zinc-600">Copyright © 2026 Peyser's Studio. All Rights Reserved.</p>
+      <p>Peyser's Studio · Belgium Travel System (BETA 1.0)</p>
+      <p class="mono mt-1 text-[11px] text-zinc-600">Copyright © 2026 Peyser Wu. All Rights Reserved.</p>
     </footer>
   </div>
 
@@ -437,7 +432,7 @@ margin: 0;
         ],
         dinners: [
           { type: "Garnaalkroketten 灰虾可乐饼", shop: "Albrecht", price: "€15 – €19", note: "市中心平价小酒馆，外酥里嫩爆浆灰虾可乐饼配沙拉", query: "Albrecht, Hertstraat 13, 8400 Oostende" },
-          { type: "Moules-Frites 青口贝锅", shop: "De Kombuis", price: "€20 – €25", note: "Visserskaai 海港边老店，海边直供新鲜度最高", query: "De Kombuis, Visserskaai, 8400 Oostende" }
+          { type: "Moules-Frites 青口贝锅", shop: "De Kombuis", price: "€20 – €25", note: "Visserskaai 海港边老店，海边直供最高新鲜度", query: "De Kombuis, Visserskaai, 8400 Oostende" }
         ]
       }
     };
@@ -509,13 +504,13 @@ margin: 0;
       const header = document.getElementById("stickyHeader");
       const title = document.getElementById("brandTitle");
       if (window.scrollY > 30) {
-        header.classList.add("py-2");
+        header.classList.add("py-1.5");
         header.classList.remove("py-3");
         title.classList.add("text-base");
         title.classList.remove("text-xl", "sm:text-2xl");
       } else {
         header.classList.add("py-3");
-        header.classList.remove("py-2");
+        header.classList.remove("py-1.5");
         title.classList.remove("text-base");
         title.classList.add("text-xl", "sm:text-2xl");
       }
@@ -708,13 +703,12 @@ margin: 0;
       }
     });
 
-    // 渲染左侧区域（根据选中信息页或城市页）
+    // 渲染左侧区域
     function renderLeftColumn() {
       const area = document.getElementById("leftColumnArea");
       area.innerHTML = "";
 
       if (currentCityId === "info") {
-        // 信息页：包含欢迎语、BETA版本说明、清单
         const doneCount = PACKING_ITEMS.filter(item => packDone[item.id]).length;
 
         area.innerHTML = `
@@ -723,9 +717,9 @@ margin: 0;
               <div class="flex items-center gap-2 mb-2 font-semibold text-white">
                 <span class="px-2 py-0.5 rounded bg-white/10 text-zinc-300 text-[11px] mono">BETA 1.0</span>
                 <span class="text-lg inline-flex items-center gap-2">
-  <span>欢迎前往比利时</span>
-  <img src="https://flagcdn.com/w40/be.png" alt="比利时国旗" class="inline-block w-5 h-auto rounded-sm align-middle" />
-</span>
+                  <span>欢迎前往比利时</span>
+                  <img src="https://flagcdn.com/w40/be.png" alt="比利时国旗" class="inline-block w-5 h-auto rounded-sm align-middle" />
+                </span>
               </div>
               <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
                 欢迎使用 Peyser's Studio 自研的多城步行漫游系统。本次行程涵盖安特卫普、布鲁日、布鲁塞尔、根特与奥斯坦德五城。本系统当前处于 Beta 测试阶段，若在数据或加载时遇到任何异常，请随时刷新。祝旅途愉快！
@@ -746,7 +740,6 @@ margin: 0;
 
         renderPackingList();
 
-        // 信息页时，右侧地图显示默认总览
         document.getElementById("mapTargetTitle").textContent = "比利时行旅地图总览";
         document.getElementById("mapTargetSub").textContent = "选择上方城市或点击火车站导航";
         const frame = document.getElementById("gmapFrame");
@@ -755,7 +748,6 @@ margin: 0;
         return;
       }
 
-      // 城市详情页：天气 + 景点 + 美食
       const city = CITIES[currentCityId];
 
       area.innerHTML = `
@@ -885,7 +877,7 @@ margin: 0;
             renderCitySpotsAndFood(city);
             return;
           }
-          focusSinglePlace(`${spot.name} · ${spot.zh}`, `${city.localName} · ${spot.area}`, spot.query);
+          focusSinglePlace(`${spot.name} · ${spot.zh}`, `${city.localName} · ${city.area}`, spot.query);
           if (window.innerWidth < 1024) {
             document.getElementById("gmapFrame").scrollIntoView({ behavior: "smooth", block: "center" });
           }
@@ -910,7 +902,7 @@ margin: 0;
             <div class="text-xs text-zinc-500 mt-0.5 leading-relaxed">${item.note}</div>
           `;
           el.addEventListener("click", () => {
-            focusSinglePlace(`${item.shop} · ${item.type}`, `${city.localName} · ${item.price}`, item.query);
+            focusSinglePlace(`${item.shop} · ${item.type}`, `${city.localName} · ${city.price}`, item.query);
             if (window.innerWidth < 1024) {
               document.getElementById("gmapFrame").scrollIntoView({ behavior: "smooth", block: "center" });
             }
